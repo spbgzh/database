@@ -5,9 +5,121 @@ conn = psycopg2.connect(database="cinema", user="spbgzh",
 cur = conn.cursor()
 list_table = ["order_record", "ticket", "remaining_seat_matrix", "session",
               "hall", "comments",  "movie", "role", "client", "cinema"]
+
+# create tables
+cur.execute("""
+CREATE TABLE "cinema" (
+  "cinema_id" SERIAL,
+  "name" varchar(50) NOT NULL,
+  "address" varchar(120) NOT NULL,
+  PRIMARY KEY ("cinema_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "client" (
+  "client_id" SERIAL,
+  "name" varchar(30) NOT NULL,
+  "password" varchar(30) NOT NULL,
+  "email" varchar(30) NOT NULL,
+  "headImg" varchar(30) DEFAULT NULL,
+  PRIMARY KEY ("client_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "role" (
+  "client_id" Integer REFERENCES "client"(client_id),
+  "role" varchar(10) DEFAULT 'USER',
+  PRIMARY KEY ("client_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "movie" (
+  "movie_id" SERIAL,
+  "name" varchar(30) NOT NULL,
+  "staring" varchar(30) DEFAULT NULL,
+  "detail" varchar(350) NOT NULL,
+  "duration" varchar(20) DEFAULT NULL,
+  "type" varchar(20) NOT NULL,
+  "score" varchar(20) DEFAULT NULL,
+  "picture" varchar(35) NOT NULL,
+  "boxOffice" varchar(20) DEFAULT NULL,
+  "commentsCount" varchar(30) DEFAULT NULL,
+  "releaseDate" date DEFAULT NULL,
+  "boxOfficeUnit" Integer DEFAULT NULL,
+  "releasePoint" varchar(30) DEFAULT NULL,
+  "commentsUnit" Integer DEFAULT NULL,
+  PRIMARY KEY ("movie_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "comments" (
+  "comments_id" SERIAL,
+  "client_id" Integer REFERENCES "client"(client_id),
+  "comments" varchar(300) NOT NULL,
+  "movie_id" Integer REFERENCES "movie"(movie_id),
+  PRIMARY KEY ("comments_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "hall" (
+  "hall_id" SERIAL,
+  "name" varchar(20) NOT NULL,
+  "cinema_id" Integer REFERENCES "cinema"(cinema_id),
+  "capacity" Integer NOT NULL,
+  PRIMARY KEY ("hall_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "session" (
+  "session_id" SERIAL,
+  "hall_id" Integer REFERENCES "hall"(hall_id),
+  "cinema_id" Integer REFERENCES "cinema"(cinema_id),
+  "movie_id" Integer REFERENCES "movie"(movie_id),
+  "date" date NOT NULL,
+  "startTime" time DEFAULT NULL,
+  "price" Integer NOT NULL,
+  PRIMARY KEY ("session_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "remaining_seat_matrix" (
+  "session_id" Integer REFERENCES "session"(session_id),
+  "row" Integer NOT NULL,
+  "column" Integer NOT NULL,
+  "value" varchar(100) NOT NULL,
+  PRIMARY KEY ("session_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "ticket" (
+  "ticket_id" SERIAL,
+  "client_id" Integer REFERENCES "client"(client_id),
+  "session_id" Integer REFERENCES "session"(session_id),
+  "hall_id" Integer REFERENCES "hall"(hall_id),
+  "seat" varchar(50) NOT NULL,
+  PRIMARY KEY ("ticket_id")
+);
+""")
+cur.execute("""
+CREATE TABLE "order_record" (
+  "order_record_id" SERIAL,
+  "ticket_id" Integer REFERENCES "ticket"(ticket_id),
+  "cinema_id" Integer REFERENCES "cinema"(cinema_id),
+  PRIMARY KEY ("order_record_id")
+);
+""")
+conn.commit()
+
+
+# drop tables
+cur.execute("DROP TABLE IF EXISTS {table}".format(table=', '.join(list_table)))
+conn.commit()
+
+# delect data from tables
 cur.execute("TRUNCATE TABLE {table}".format(table=', '.join(list_table)))
 conn.commit()
 
+# create data for tables
 # cinema
 cur.execute("INSERT INTO cinema VALUES (%s,%s,%s)", ('1', 'Cinemart Cinemas',
             '106-03 Metropolitan Ave, Queens, NY 11375, United States'))
