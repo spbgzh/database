@@ -20,7 +20,7 @@ CREATE TABLE "client" (
   "name" varchar(30) NOT NULL,
   "password" varchar(30) NOT NULL,
   "email" varchar(30) NOT NULL,
-  "headImg" varchar(30) DEFAULT NULL,
+  "headimg" varchar(30) DEFAULT NULL,
   PRIMARY KEY ("client_id")
 );
 CREATE TABLE "role" (
@@ -37,12 +37,12 @@ CREATE TABLE "movie" (
   "type" varchar(20) NOT NULL,
   "score" varchar(20) DEFAULT NULL,
   "picture" varchar(35) NOT NULL,
-  "boxOffice" varchar(20) DEFAULT NULL,
-  "commentsCount" varchar(30) DEFAULT NULL,
-  "releaseDate" date DEFAULT NULL,
-  "boxOfficeUnit" Integer DEFAULT NULL,
-  "releasePoint" varchar(30) DEFAULT NULL,
-  "commentsUnit" Integer DEFAULT NULL,
+  "box_office" varchar(20) DEFAULT NULL,
+  "comments_count" varchar(30) DEFAULT NULL,
+  "release_date" date DEFAULT NULL,
+  "box_office_unit" Integer DEFAULT NULL,
+  "release_point" varchar(30) DEFAULT NULL,
+  "comments_unit" Integer DEFAULT NULL,
   PRIMARY KEY ("movie_id")
 );
 CREATE TABLE "comments" (
@@ -65,14 +65,14 @@ CREATE TABLE "session" (
   "cinema_id" Integer REFERENCES "cinema"(cinema_id),
   "movie_id" Integer REFERENCES "movie"(movie_id),
   "date" date NOT NULL,
-  "startTime" time DEFAULT NULL,
+  "start_time" time DEFAULT NULL,
   "price" Integer NOT NULL,
   PRIMARY KEY ("session_id")
 );
 CREATE TABLE "remaining_seat_matrix" (
   "session_id" Integer REFERENCES "session"(session_id),
   "row" Integer NOT NULL,
-  "column" Integer NOT NULL,
+  "col" Integer NOT NULL,
   "value" varchar(100) NOT NULL,
   PRIMARY KEY ("session_id")
 );
