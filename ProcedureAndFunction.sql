@@ -3,7 +3,7 @@
 -- CALL delect_ticket(1);
 -- call buy_ticket(1, 'R18', '2022-11-28', '20:30:00');
 -- call add_movie('Venom', 'Ruben Fleischer', 'In the film, struggling journalist Brock gains superpowers after becoming the host of an alien symbiote, Venom, whose species plans to invade Earth.', '112', 'Action,Sci-fi', '9.3', 'img/movies/movie1.jpg', '14.86', '66.8', '2018-11-09', '100000000', 'America', '10000');
---
+-- INSERT into client VALUES (6,'tessss','123','1232132','123123')
 
 CREATE OR REPLACE FUNCTION find_movies(movie_name varchar, cinema_name varchar) RETURNS text AS $$
 declare temp_date date;
@@ -135,3 +135,29 @@ VALUES (
     );
 END;
 $$;
+
+
+
+
+CREATE OR REPLACE FUNCTION function_tr()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+    if position('@' in new.email) =0
+		then
+			RAISE EXCEPTION 'Its not a email';
+    end if;
+		
+    if length(new.password)<=6 
+		then
+		RAISE EXCEPTION 'Password is too short';
+    end if;
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER check_client_data
+   BEFORE INSERT ON client
+   FOR EACH ROW
+	 EXECUTE PROCEDURE function_tr();
