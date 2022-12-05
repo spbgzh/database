@@ -64,7 +64,7 @@ CREATE TABLE "session" (
   "hall_id" Integer REFERENCES "hall"(hall_id),
   "cinema_id" Integer REFERENCES "cinema"(cinema_id),
   "movie_id" Integer REFERENCES "movie"(movie_id),
-  "date" date NOT NULL,
+  "session_date" date NOT NULL,
   "start_time" time DEFAULT NULL,
   "price" Integer NOT NULL,
   PRIMARY KEY ("session_id")

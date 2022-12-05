@@ -85,7 +85,7 @@ CREATE TABLE "session" (
   "hall_id" Integer REFERENCES "hall"(hall_id),
   "cinema_id" Integer REFERENCES "cinema"(cinema_id),
   "movie_id" Integer REFERENCES "movie"(movie_id),
-  "date" date NOT NULL,
+  "session_date" date NOT NULL,
   "start_time" time DEFAULT NULL,
   "price" Integer NOT NULL,
   PRIMARY KEY ("session_id")
@@ -190,7 +190,7 @@ for table in list_create_data:
                 cur.execute("INSERT INTO hall (name, cinema_id, capacity) VALUES (%s,%s,%s)",
                             ("Hall"+str(random.randint(1, 10)), random_id(), random.randrange(10, 100, 10)))
             case "session":
-                cur.execute("INSERT INTO session (hall_id, cinema_id, movie_id, date, start_time, price) VALUES (%s,%s,%s,%s,%s,%s)",
+                cur.execute("INSERT INTO session (hall_id, cinema_id, movie_id, session_date, start_time, price) VALUES (%s,%s,%s,%s,%s,%s)",
                             (random_id(), random_id(), random_id(), random_date(), random_time(), random.randrange(10, 100, 10)))
             case "ticket":
                 cur.execute("INSERT INTO ticket (client_id, session_id, hall_id, seat) VALUES (%s,%s,%s,%s)",
