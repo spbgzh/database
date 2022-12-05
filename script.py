@@ -126,7 +126,7 @@ cur.execute("TRUNCATE TABLE {table}".format(table=', '.join(list_table)))
 conn.commit()
 
 
-num_data = 100
+num_data = 10000
 list_create_data = ["cinema", "client", "movie", "comments", "hall",
                     "session", "ticket", "order_record", "remaining_seat_matrix", "role"]
 fake = Faker()
@@ -162,7 +162,7 @@ id = 0
 
 def matrix_id():
     global id
-    if id == 100:
+    if id == num_data:
         id = 0
     id = id+1
     return id
